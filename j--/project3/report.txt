@@ -1,0 +1,112 @@
+1. Enter the number of hours it took you to complete the project between
+   the <<< and >>> signs below (eg, <<<10>>>).
+
+   <<<15>>>
+   
+2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
+   between the <<< and >>> signs below (eg, <<<3>>>).
+
+   <<<5>>>
+
+3. Provide a short description of how you approached each problem, issues you 
+   encountered, and how you resolved those issues.
+
+   Problem 1 (Long and Double Basic Types): ...
+      Approach: I looked at the statics for other Basic Types in Type.java
+      and then added two Basic type that represent Long and Double.
+
+      Issues and resolution: ...
+
+   Problem 2 (Operators): ...
+      Approach: This was very similar to what we've done in HW1. I realized at HW1 we didn't
+      implement assignmentExpression and the other Expressions. So I implemented them with all the
+      Assignment Operator Expressions including the terniary operators.
+
+      Issues and resolution: I ran into an issue where I didn't implement conditionalExpression to
+      have conditionalOrExpression(); so I implemented that there and fixed it.
+
+   Problem 3 (Conditional Expression): ...
+      Approach: Fairly simple, I realized in Problem 2 I implemented the ternary operator and
+      finished it.
+
+      Issues and resolution: ...
+
+   Problem 4 (Do Statement): ...
+      Approach: I looked at that rules for Statement and realized most of the future problems where
+      there. I found the statement function that represent the code and looked at the rules for a
+      while loop and decided to do the rules for an Do Statement.
+
+      Issues and resolution: Though I didn't know where parExpression and statement() were at, I
+      think searching for the grammer and knowing some functions represented the grammer I was able
+      to finish thhis fairly quickly.
+
+   Problem 5 (For Statement): ...
+      Approach: This was a bit harder and I needed to create two extra functions forInit and
+      forUpdate. Designing these functions were extremely easy due to how the grammer design the
+      rules, it was uncomfortable and I realized this was much easier than I thought.
+
+      Issues and resolution: I ran to almost no issue as I spent a lot of time looking at other
+      functions that represented the grammer. Essentially forInit was all I needed to know and
+      forUpdate was easier. I first started with obtaining a statementExpression  that would
+      represent the initalization in the first expression in for(). Then after that the 2nd
+      expression would just be a simple comparison expression. Then after that the update expression
+       would have many expressions that doesn't require any initlization that forInit() needed.
+
+   Problem 6 (Break Statement): ...
+      Approach: Extremely easily
+
+      Issues and resolution: Coded the grammar rules and ran to no issues
+
+   Problem 7 (Continue Statement): ...
+      Approach: Also very
+
+      Issues and resolution: One thing that helps predicting the difficult of the last two problems
+      is knowing what the new If-else return value will have, if it's passing nothing but a line
+      it's really easy but if it's passing a lot more like for loop extremely hard.
+
+   Problem 8 (Switch Statement): ...
+      Approach: I looked into the grammar, and realized that I needed a while loop that took a lot
+      of switchBlockStatementGroup. I used Intellji to actually look into what was going in
+      JSwitchStatement and found that there was a classed called switchBlockStatementGroup and
+      looked and what I needed to pass through that and there I saw two important ArrayList which
+      wer
+
+      Issues and resolution: I wrote the code and was extremely clear, and got it running pretty
+      well
+
+   Problem 9 (Exception Handlers): ...
+      Approach: I originally approached this with just impmenting THROW and SEMI, but I realized
+      that this was a lot more than I anticipated once I started having errors on
+      'ExceptionHandlers.java'. I realized that that the errors were coming on the member function
+      declaration. As usual I tried finding something like that on grammar.pdf and saw memberDecl. I
+       looked and saw that there was an implementation of memberDecl on parser.java. Then decided to
+        update the errors there.
+
+      Issues and resolution: I don't essentially remember what issues I came into, however I did fix
+       most after updating memberDecl() by adding the if statements for when we see THROWS
+
+   Problem 10 (Interface Type Declaration): ...
+      Approach: After understanding how to approach Problem 9, I decided to look at the java file
+      that we would have to run and verify what changes we'll need to update or add on Parser.java.
+      I saw implements and interface and decided to look at where they were used on grammar.pdf and
+      see if we need to implement on Parser.java
+
+      Issues and resolution: after my findings, I looked into interfaceMemberDecl and used
+      memberDecl as reference for the function. I also notice there various stuff like
+      interfaceBody, as well as interfaceDeclaration. Then finally typeDeclaration.
+
+4. Did you receive help from anyone? List their names, status (classmate, 
+   CS451/651 grad, TA, other), and the nature of help received.
+
+   Name               Status       Help Received
+   ----               ------       -------------
+
+   ...                ...          ...
+
+5. List any other comments here. Feel free to provide any feedback on how
+   much you learned from doing the assignment, and whether you enjoyed
+   doing it.
+
+   This was extremely long, and extremely tough at the beginning. I really had no idea how to
+   approach the beginning and once I started understanding how the grammar is fully read it was a
+   lot more easier ot implement features into Parser.java to run the problems.

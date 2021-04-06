@@ -1,0 +1,60 @@
+1. Enter the number of hours it took you to complete the project between
+   the <<< and >>> signs below (eg, <<<10>>>).
+
+   <<<9>>>
+   
+2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
+   between <<< and >>> signs below (eg, <<<3>>>).
+
+   <<<3>>>
+
+3. Provide a short description of how you approached each problem, issues you 
+   encountered, and how you resolved those issues.
+
+   Problem 1 (Multiline Comment)
+      Approach: I understood that the implemented of the Multiline Comment was similar
+      to single comment line, so I decided to add an  nested else if on the '/' if block.
+      Here I'd need to make sure when are in the multine part of the code, we can check when
+      we get out and break the loop.
+
+      Issues and resolution: I had an issue where the Scanner where I didn't really add a break
+      point in the 2nd nested loop of the code.
+
+   Problem 2 (Operators)
+      Approach: Here I add the the Operators on TokenInfo, and then I proceed to just where I would
+      Scan them on Scanner.java.
+
+      Issues and resolution: No Issues, pretty simple
+   
+   Problem 3 (Reserved Words)
+      Approach: Similar to Problem 2, where I add the Reserved Words on the TokenInfo.java. Then
+      there's a section that has all the Reserved words being placed on Scanner.java. I added the
+      Reserved words there, similar to how the others were added.
+
+      Issues and resolution: Quite Simple and no Issues
+
+   Problem 4 (Literals)
+      Approach: Extremely hard, I wasn't unsure where to start working on this. But given that we
+      had an intliteral example, I looked at it and realized that I could add upon it for Long
+      literal and double literal. Long literal was a simple if statement, then I created tons of
+      nested else ifs for Double since they have so much versions of literals.
+
+      Issues and resolution: This took most of my issuess, and time. I had to constantly check if I
+      was right and by doing that I just got the output of Literals.java and compared it with
+      Literal.Tokens. I was adding a lot of ')' into the literals so I had to clean that out. Just
+      testing it constantly over and over made it easier to fix but a bit more tedious.
+
+4. Did you receive help from anyone? List their names, status (classmate, 
+   CS451/651 grad, TA, other), and the nature of help received.
+
+   Name               Status       Help Received
+   ----               ------       -------------
+
+   N/A                N/A          N/A
+
+5. List any other comments here. Feel free to provide any feedback on how
+   much you learned from doing the assignment, and whether you enjoyed
+   doing it.
+
+   It was pretty interesting implementing a double literal, a lot of nested ifs I had to add in.
+   I could've considered implementing switchcase and I think that might have made it a bit easier.

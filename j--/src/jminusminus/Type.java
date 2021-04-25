@@ -69,6 +69,16 @@ class Type {
     public final static Type BOXED_BOOLEAN = typeFor(java.lang.Boolean.class);
 
     /**
+     * The java.lang.Boolean type.
+     */
+    public final static Type BOXED_LONG = typeFor(java.lang.Long.class);
+
+    /**
+     * The java.lang.Boolean type.
+     */
+    public final static Type BOXED_DOUBLE = typeFor(java.lang.Double.class);
+
+    /**
      * The java.lang.String type.
      */
     public static Type STRING = typeFor(java.lang.String.class);

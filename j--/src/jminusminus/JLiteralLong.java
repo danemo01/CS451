@@ -26,15 +26,26 @@ class JLiteralLong extends JExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        // TODO
+        type = Type.LONG;
         return this;
+    }
+
+    private long toLong() {
+        return Long.parseLong(text.substring(0, text.length() - 1));
     }
 
     /**
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // TODO
+        long l = toLong();
+        if (l == 0L)
+            output.addNoArgInstruction(LCONST_0);
+        else if (l == 1L)
+            output.addNoArgInstruction(LCONST_1);
+        else
+            output.addLDCInstruction(1);
+
     }
 
     /**

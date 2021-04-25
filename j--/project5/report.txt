@@ -12,7 +12,8 @@
    encountered, and how you resolved those issues.
 
    Problem 1 (Long and Double Basic Types)
-      Approach: ...
+      Approach: I understand that codegen computes the fully-qualified name for the class, taking
+      any package name into account.
 
       Issues and resolution: ...
 

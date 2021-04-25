@@ -77,9 +77,26 @@ class JMultiplyOp extends JBinaryExpression {
     public JExpression analyze(Context context) {
         lhs = (JExpression) lhs.analyze(context);
         rhs = (JExpression) rhs.analyze(context);
-        lhs.type().mustMatchExpected(line(), Type.INT);
-        rhs.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+        if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
+            return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
+        } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
+            //lhs.type().mustMatchExpected(line, Type.INT);
+            //rhs.type().mustMatchExpected(line, Type.INT);
+            type = Type.INT;
+        } else if (lhs.type() == Type.LONG && rhs.type() == Type.LONG) {
+            //lhs.type().mustMatchExpected(line, Type.LONG);
+            //rhs.type().mustMatchExpected(line, Type.LONG);
+            type = Type.LONG;
+
+        } else if (lhs.type() == Type.DOUBLE && rhs.type() == Type.DOUBLE) {
+            //lhs.type().mustMatchExpected(line, Type.DOUBLE);
+            //rhs.type().mustMatchExpected(line, Type.DOUBLE);
+            type = Type.DOUBLE;
+        }
+        else {
+            type = Type.ANY;
+            JAST.compilationUnit.reportSemanticError(line(), "Invalid operand types for +");
+        }
         return this;
     }
 
@@ -89,7 +106,13 @@ class JMultiplyOp extends JBinaryExpression {
     public void codegen(CLEmitter output) {
         lhs.codegen(output);
         rhs.codegen(output);
-        output.addNoArgInstruction(IMUL);
+
+        if (lhs.type() == Type.INT)
+            output.addNoArgInstruction(IMUL);
+        else if (lhs.type() == Type.DOUBLE)
+            output.addNoArgInstruction(DMUL);
+        else if (lhs.type() == Type.LONG)
+            output.addNoArgInstruction(LMUL);
     }
 }
 
@@ -118,8 +141,20 @@ class JPlusOp extends JBinaryExpression {
         if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
             return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
         } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
+            //lhs.type().mustMatchExpected(line, Type.INT);
+            //rhs.type().mustMatchExpected(line, Type.INT);
             type = Type.INT;
-        } else {
+        } else if (lhs.type() == Type.LONG && rhs.type() == Type.LONG) {
+            //lhs.type().mustMatchExpected(line, Type.LONG);
+            //rhs.type().mustMatchExpected(line, Type.LONG);
+            type = Type.LONG;
+
+        } else if (lhs.type() == Type.DOUBLE && rhs.type() == Type.DOUBLE) {
+            //lhs.type().mustMatchExpected(line, Type.DOUBLE);
+            //rhs.type().mustMatchExpected(line, Type.DOUBLE);
+            type = Type.DOUBLE;
+        }
+        else {
             type = Type.ANY;
             JAST.compilationUnit.reportSemanticError(line(), "Invalid operand types for +");
         }
@@ -132,7 +167,13 @@ class JPlusOp extends JBinaryExpression {
     public void codegen(CLEmitter output) {
         lhs.codegen(output);
         rhs.codegen(output);
-        output.addNoArgInstruction(IADD);
+
+        if (lhs.type() == Type.INT)
+            output.addNoArgInstruction(IADD);
+        else if (lhs.type() == Type.DOUBLE)
+            output.addNoArgInstruction(DADD);
+        else if (lhs.type() == Type.LONG)
+            output.addNoArgInstruction(LADD);
     }
 }
 
@@ -157,9 +198,26 @@ class JSubtractOp extends JBinaryExpression {
     public JExpression analyze(Context context) {
         lhs = (JExpression) lhs.analyze(context);
         rhs = (JExpression) rhs.analyze(context);
-        lhs.type().mustMatchExpected(line(), Type.INT);
-        rhs.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+        if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
+            return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
+        } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
+            //lhs.type().mustMatchExpected(line, Type.INT);
+            //rhs.type().mustMatchExpected(line, Type.INT);
+            type = Type.INT;
+        } else if (lhs.type() == Type.LONG && rhs.type() == Type.LONG) {
+            //lhs.type().mustMatchExpected(line, Type.LONG);
+            //rhs.type().mustMatchExpected(line, Type.LONG);
+            type = Type.LONG;
+
+        } else if (lhs.type() == Type.DOUBLE && rhs.type() == Type.DOUBLE) {
+            //lhs.type().mustMatchExpected(line, Type.DOUBLE);
+            //rhs.type().mustMatchExpected(line, Type.DOUBLE);
+            type = Type.DOUBLE;
+        }
+        else {
+            type = Type.ANY;
+            JAST.compilationUnit.reportSemanticError(line(), "Invalid operand types for +");
+        }
         return this;
     }
 
@@ -169,7 +227,13 @@ class JSubtractOp extends JBinaryExpression {
     public void codegen(CLEmitter output) {
         lhs.codegen(output);
         rhs.codegen(output);
-        output.addNoArgInstruction(ISUB);
+
+        if (lhs.type() == Type.INT)
+            output.addNoArgInstruction(ISUB);
+        else if (lhs.type() == Type.DOUBLE)
+            output.addNoArgInstruction(DSUB);
+        else if (lhs.type() == Type.LONG)
+            output.addNoArgInstruction(LSUB);
     }
 }
 
@@ -194,9 +258,26 @@ class JDivideOp extends JBinaryExpression {
     public JExpression analyze(Context context) {
         lhs = (JExpression) lhs.analyze(context);
         rhs = (JExpression) rhs.analyze(context);
-        lhs.type().mustMatchExpected(line(), Type.INT);
-        rhs.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+        if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
+            return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
+        } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
+            //lhs.type().mustMatchExpected(line, Type.INT);
+            //rhs.type().mustMatchExpected(line, Type.INT);
+            type = Type.INT;
+        } else if (lhs.type() == Type.LONG && rhs.type() == Type.LONG) {
+            //lhs.type().mustMatchExpected(line, Type.LONG);
+            //rhs.type().mustMatchExpected(line, Type.LONG);
+            type = Type.LONG;
+
+        } else if (lhs.type() == Type.DOUBLE && rhs.type() == Type.DOUBLE) {
+            //lhs.type().mustMatchExpected(line, Type.DOUBLE);
+            //rhs.type().mustMatchExpected(line, Type.DOUBLE);
+            type = Type.DOUBLE;
+        }
+        else {
+            type = Type.ANY;
+            JAST.compilationUnit.reportSemanticError(line(), "Invalid operand types for +");
+        }
         return this;
     }
 
@@ -206,7 +287,13 @@ class JDivideOp extends JBinaryExpression {
     public void codegen(CLEmitter output) {
         lhs.codegen(output);
         rhs.codegen(output);
-        output.addNoArgInstruction(IDIV);
+
+        if (lhs.type() == Type.INT)
+            output.addNoArgInstruction(IDIV);
+        else if (lhs.type() == Type.DOUBLE)
+            output.addNoArgInstruction(DDIV);
+        else if (lhs.type() == Type.LONG)
+            output.addNoArgInstruction(LDIV);
     }
 }
 
@@ -231,9 +318,26 @@ class JRemainderOp extends JBinaryExpression {
     public JExpression analyze(Context context) {
         lhs = (JExpression) lhs.analyze(context);
         rhs = (JExpression) rhs.analyze(context);
-        lhs.type().mustMatchExpected(line(), Type.INT);
-        rhs.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+        if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
+            return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
+        } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
+            lhs.type().mustMatchExpected(line, Type.INT);
+            rhs.type().mustMatchExpected(line, Type.INT);
+            type = Type.INT;
+        } else if (lhs.type() == Type.LONG && rhs.type() == Type.LONG) {
+            lhs.type().mustMatchExpected(line, Type.LONG);
+            rhs.type().mustMatchExpected(line, Type.LONG);
+            type = Type.LONG;
+
+        } else if (lhs.type() == Type.DOUBLE && rhs.type() == Type.DOUBLE) {
+            lhs.type().mustMatchExpected(line, Type.DOUBLE);
+            rhs.type().mustMatchExpected(line, Type.DOUBLE);
+            type = Type.DOUBLE;
+        }
+        else {
+            type = Type.ANY;
+            JAST.compilationUnit.reportSemanticError(line(), "Invalid operand types for +");
+        }
         return this;
     }
 
@@ -243,7 +347,13 @@ class JRemainderOp extends JBinaryExpression {
     public void codegen(CLEmitter output) {
         lhs.codegen(output);
         rhs.codegen(output);
-        output.addNoArgInstruction(IREM);
+
+        if (lhs.type() == Type.INT)
+            output.addNoArgInstruction(IREM);
+        else if (lhs.type() == Type.DOUBLE)
+            output.addNoArgInstruction(DREM);
+        else if (lhs.type() == Type.LONG)
+            output.addNoArgInstruction(LREM);
     }
 }
 

@@ -111,8 +111,23 @@ class JNegateOp extends JUnaryExpression {
      */
     public JExpression analyze(Context context) {
         operand = operand.analyze(context);
-        operand.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+
+        if (operand.type() == Type.INT) {
+            operand.type().mustMatchExpected(line(), Type.INT);
+            type = Type.INT;
+        } else if (operand.type() == Type.LONG)
+        {
+            operand.type().mustMatchExpected(line(), Type.LONG);
+            type = Type.LONG;
+        } else if (operand.type() == Type.DOUBLE)
+        {
+            operand.type().mustMatchExpected(line(), Type.DOUBLE);
+            type = Type.DOUBLE;
+        } else {
+            type = Type.ANY;
+            JAST.compilationUnit.reportSemanticError(line(), "Operand to - must have an LValue.");
+        }
+
         return this;
     }
 
@@ -121,7 +136,12 @@ class JNegateOp extends JUnaryExpression {
      */
     public void codegen(CLEmitter output) {
         operand.codegen(output);
-        output.addNoArgInstruction(INEG);
+        if (type == Type.INT)
+            output.addNoArgInstruction(INEG);
+        else if (type == Type.LONG)
+            output.addNoArgInstruction(LNEG);
+        else if (type == Type.DOUBLE)
+            output.addNoArgInstruction(DNEG);
     }
 }
 
@@ -256,8 +276,22 @@ class JUnaryPlusOp extends JUnaryExpression {
      */
     public JExpression analyze(Context context) {
         operand = operand.analyze(context);
-        operand.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+
+        if (operand.type() == Type.INT) {
+            operand.type().mustMatchExpected(line(), Type.INT);
+            type = Type.INT;
+        } else if (operand.type() == Type.LONG)
+        {
+            operand.type().mustMatchExpected(line(), Type.LONG);
+            type = Type.LONG;
+        } else if (operand.type() == Type.DOUBLE)
+        {
+            operand.type().mustMatchExpected(line(), Type.DOUBLE);
+            type = Type.DOUBLE;
+        } else {
+            type = Type.ANY;
+            JAST.compilationUnit.reportSemanticError(line(), "Operand to - must have an LValue.");
+        }
         return this;
     }
 
@@ -265,7 +299,7 @@ class JUnaryPlusOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        operand.codegen(output);
+       operand.codegen(output);
     }
 }
 
@@ -324,7 +358,9 @@ class JPostIncrementOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        // TODO
+        operand = operand.analyze(context);
+        operand.type().mustMatchExpected(line(), Type.INT);
+        type = Type.INT;
         return this;
     }
 
@@ -332,7 +368,25 @@ class JPostIncrementOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // TODO
+        if (operand instanceof JVariable) {
+            int offset = ((LocalVariableDefn) ((JVariable) operand).iDefn()).offset();
+            if (!isStatementExpression) {
+                operand.codegen(output);
+            }
+            output.addIINCInstruction(offset, 1);
+
+        } else {
+            ((JLhs) operand).codegenLoadLhsLvalue(output);
+            ((JLhs) operand).codegenLoadLhsRvalue(output );
+            if (!isStatementExpression) {
+                ((JLhs) operand).codegenDuplicateRvalue(output);
+            }
+
+            output.addNoArgInstruction(ICONST_1);
+            output.addNoArgInstruction(IADD);
+
+            ((JLhs) operand).codegenStore(output);
+        }
     }
 }
 
@@ -354,7 +408,9 @@ class JPreDecrementOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        // TODO
+        operand = operand.analyze(context);
+        operand.type().mustMatchExpected(line(), Type.INT);
+        type = Type.INT;
         return this;
     }
 
@@ -362,6 +418,26 @@ class JPreDecrementOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // TODO
+        if (operand instanceof JVariable) {
+            int offset = ((LocalVariableDefn) ((JVariable) operand).iDefn()).offset();
+            if (!isStatementExpression) {
+                operand.codegen(output);
+            }
+            output.addIINCInstruction(offset, -1);
+
+        } else {
+            ((JLhs) operand).codegenLoadLhsLvalue(output);
+            ((JLhs) operand).codegenLoadLhsRvalue(output );
+            if (!isStatementExpression) {
+                ((JLhs) operand).codegenDuplicateRvalue(output);
+            }
+
+            // Add 1
+            output.addNoArgInstruction(ICONST_1);
+            // Sub A - 1
+            output.addNoArgInstruction(ISUB);
+
+            ((JLhs) operand).codegenStore(output);
+        }
     }
 }

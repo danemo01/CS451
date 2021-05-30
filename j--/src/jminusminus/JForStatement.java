@@ -22,6 +22,13 @@ class JForStatement extends JStatement {
     // The body.
     private JStatement body;
 
+    // For Break Statemnt
+    public String breakLabel;
+
+    // For Continue Statement
+    public String continueLabel;
+
+
     /**
      * Constructs an AST node for a for-statement.
      *
@@ -44,7 +51,41 @@ class JForStatement extends JStatement {
      * {@inheritDoc}
      */
     public JForStatement analyze(Context context) {
-        // TODO
+
+        JMember.enclosingStatement.push(this);
+        LocalContext locContext = new LocalContext(context);
+
+        if (init != null ) {
+            ArrayList<JStatement> newInit = new ArrayList<>();
+            for (JStatement i : init) {
+                i = (JStatement) i.analyze(locContext);
+                newInit.add(i);
+            }
+            this.init = newInit;
+        }
+        // Analyze  condition and check if it's boolean
+        if (condition != null)
+            condition = condition.analyze(locContext);
+
+        // Condition should only have one expression
+
+        // Now for Update
+
+        if (update != null) {
+            ArrayList<JStatement> newUpdate = new ArrayList<>();
+            for (JStatement u : update) {
+                u = (JStatement) u.analyze(locContext);
+                newUpdate.add(u);
+            }
+            this.update = newUpdate;
+        }
+        // Body
+        if (body != null)
+            body = (JStatement) body.analyze(locContext);
+
+        JMember.enclosingStatement.pop();
+
+
         return this;
     }
 
@@ -52,7 +93,39 @@ class JForStatement extends JStatement {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // TODO
+        String conditionalLabel = output.createLabel();
+        breakLabel = output.createLabel();
+        continueLabel = output.createLabel();
+
+
+        // Generate codes for all the statements in intialization for(init;;)
+        if (init != null) {
+            for (JStatement i : init) {
+                i.codegen(output);
+            }
+        }
+
+        // Now check for statement on condition
+        output.addLabel(conditionalLabel);
+        // Jump to break Label is false
+        if (condition != null)
+            condition.codegen(output, breakLabel, false);
+
+        // Code Generation
+        body.codegen(output);
+
+        // Generate code for Update for(;;update)
+
+        output.addLabel(continueLabel);
+
+        if (update != null) {
+            for (JStatement u : update) {
+                u.codegen(output);
+            }
+        }
+        // Jump back to condition
+        output.addBranchInstruction(GOTO, conditionalLabel);
+        output.addLabel(breakLabel);
     }
 
     /**

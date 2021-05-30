@@ -2,12 +2,15 @@
 
 package jminusminus;
 
+import java.security.cert.TrustAnchor;
+
 import static jminusminus.CLConstants.*;
 
 /**
  * An AST node for a break-statement.
  */
 public class JBreakStatement extends JStatement {
+    JStatement s = null;
     /**
      * Constructs an AST node for a break-statement.
      *
@@ -21,7 +24,8 @@ public class JBreakStatement extends JStatement {
      * {@inheritDoc}
      */
     public JStatement analyze(Context context) {
-        // TODO
+        // peek into enclosingStatement
+        s = JMember.enclosingStatement.peek();
         return this;
     }
 
@@ -29,7 +33,13 @@ public class JBreakStatement extends JStatement {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // TODO
+        if (s instanceof JDoStatement) {
+            output.addBranchInstruction(GOTO, ((JDoStatement) s).breakLabel);
+        } else if (s instanceof JWhileStatement) {
+            output.addBranchInstruction(GOTO, ((JWhileStatement) s).breakLabel);
+        } else if (s instanceof JForStatement) {
+            output.addBranchInstruction(GOTO, ((JForStatement) s).breakLabel);
+        }
     }
 
     /**

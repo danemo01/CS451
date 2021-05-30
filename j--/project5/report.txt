@@ -1,66 +1,117 @@
 1. Enter the number of hours it took you to complete the project between
    the <<< and >>> signs below (eg, <<<10>>>).
 
-   <<< >>>
+   <<<10-15>>>
    
 2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
    between the <<< and >>> signs below (eg, <<<3>>>).
 
-   <<< >>>
+   <<<5>>>
 
 3. Provide a short description of how you approached each problem, issues you 
    encountered, and how you resolved those issues.
 
    Problem 1 (Long and Double Basic Types)
       Approach: I understand that codegen computes the fully-qualified name for the class, taking
-      any package name into account.
+      any package name into account. Looking at the hints I decided to look into
 
-      Issues and resolution: ...
+      Issues and resolution: Ran to a lot of issues, and I skipped and went to Problem 2.
+      Though I believe most of my issues came from CastOp missing a lot of Conversions.
+      As well as MethodDeclaration having some extra missing stuff.
 
    Problem 2 (Operators)
-      Approach: ...
+      Approach: I don't really remember fully what I did in this part.
+      I refer to the hints as usual, and implemented analyze and codegen.
+      Eventually I copied and paste for most of the tasks needed.
 
-      Issues and resolution: ...
+      Issues and resolution: I ran to an compilation error when trying
+      to compile Operator.java. I was sorta clueless and I asked on
+      piazza how to approach this. Percy Deng's insight for debugging
+      helped me approach my problem and I essentially didn't assign
+      a type for the AssignOperations. after doing that every ran perfectly
+      well.
 
    Problem 3 (Conditional Expression)
-      Approach: ...
+      Approach: This was on the lecture, and it was similar to how
+      JIfStatement implemented it's codegen and analyze
 
-      Issues and resolution: ...
+      Issues and resolution: Ran it and I had no issue.
 
    Problem 4 (Do Statement)
-      Approach: ...
+      Approach: I refer to the Hints, and created the analyze based on what
+      they wanted me to do. After doing that the implementation of
+      codegen() just needed the body and condition
 
-      Issues and resolution: ...
+      Issues and resolution: No issues, was able to run test fine.
 
    Problem 5 (For Statement)
-      Approach: ...
+      Approach: The hints/grammar came a good idea on implementing the analyze
+      Essentially create a locContext to analyze them for localVariables.
+      We do that upon the init and update lists of Jstatement. We will need
+      to get those two lists and run the codgen for them.
 
-      Issues and resolution: ...
+      Issues and resolution: At first had no issues, but I didn't check if
+      update and init were empty due to the test for this Problem not
+      having it. Later I will check for them.
 
    Problem 6 (Break Statement)
-      Approach: ...
+      Approach: The hint was pretty meaty similar to SwitchCaseStatement, and
+      it took a while to understand why we needed hasBreak and breakLabel.
+      So I decided to look into the example for Break and realized that we
+      need to add a Label in codegen. Though understanding break is similar
+      to out. I soon relaized we use a enclosingStatement to check if we got
+      BreakStatement there JBreakStatement would generate that code. In this
+      case we needed to create an Addbranchinstruction on breakLabel.
+      There it would depend the particular breakLabel on either
+      do, while, for, and switch (didn't implement switch). As well as
+      since each JStatement has breakLabel has a member variable. We'd
+      implement a codgen there.
 
-      Issues and resolution: ...
+      Issues and resolution: I ran to a lot of issues, where I kept getting 2.
+      Percy's tip of Operator allowed me to debug using println on the test
+      for this problem. I realized I didn't implement for the While loop.
+      Later on I decided to remove hasBreak since it's not necessary
+      on how I implemented it.
 
    Problem 7 (Continue Statement)
-      Approach: ...
+      Approach: This was very similar to Break Statement, and implemented the
+      same ideas here with the help of the hints provided. I don't think
+      I needed hasContinue but I still implemented that idea similar to how
+      I did BreakStatement
 
-      Issues and resolution: ...
+      Issues and resolution: Had no issues, ran well.
+      Later on I decided to remove hasContinue since it's not necessary
+      on how I implemented it.
 
    Problem 8 (Switch Statement)
-      Approach: ...
+      Approach: Lack of time completing
 
-      Issues and resolution: ...
+      Issues and resolution: I came into a lot of difficult understanding how
+
 
    Problem 9 (Exception Handlers)
-      Approach: ...
+      Approach: Lack of time to complete
 
-      Issues and resolution: ...
+      Issues and resolution: I didn't have enough time to approach it.
 
    Problem 10 (Interface Type Declaration)
-      Approach: ...
+      Approach: Readng the hints, I added the abstract and public in mods.
+      Then we add "abstract" and "interface" in the constructor for
+      JInterfaceDeclaration on the list of modifiers.
 
-      Issues and resolution: ...
+      After that I didn't understand how to approach Modify(), but I realize
+      that class didn't pass superInterface and I looked into that method and
+      saw it needed an ArrayList of string and Typename (the hint in Prob9
+      help).
+
+      Then after that we needed to implement JinterfaceDeclaration to
+      JClassDeclaration.. I decided to copy and paste from JClassDeclaration
+      and remove things that weren't necessary. After doing that I ran it just
+      to verify what I could be missing. It ran well. I think the test for
+      Interface.java didn't consider most things so I was able to run it with
+      no issue
+
+      Issues and resolution: Ran perfectly well
 
 4. Did you receive help from anyone? List their names, status (classmate, 
    CS451/651 grad, TA, other), and the nature of help received.

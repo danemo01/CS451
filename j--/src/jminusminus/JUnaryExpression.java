@@ -408,9 +408,14 @@ class JPreDecrementOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        operand = operand.analyze(context);
-        operand.type().mustMatchExpected(line(), Type.INT);
-        type = Type.INT;
+        if (!(operand instanceof JLhs)) {
+            JAST.compilationUnit.reportSemanticError(line, "Operand to ++ must have an LValue.");
+            type = Type.ANY;
+        } else {
+            operand = (JExpression) operand.analyze(context);
+            operand.type().mustMatchExpected(line(), Type.INT);
+            type = Type.INT;
+        }
         return this;
     }
 
@@ -419,24 +424,23 @@ class JPreDecrementOp extends JUnaryExpression {
      */
     public void codegen(CLEmitter output) {
         if (operand instanceof JVariable) {
+            // A local variable; otherwise analyze() would have replaced it with an explicit
+            // field selection.
             int offset = ((LocalVariableDefn) ((JVariable) operand).iDefn()).offset();
+            output.addIINCInstruction(offset, -1);
             if (!isStatementExpression) {
+                // Loading its original rvalue.
                 operand.codegen(output);
             }
-            output.addIINCInstruction(offset, -1);
-
         } else {
             ((JLhs) operand).codegenLoadLhsLvalue(output);
-            ((JLhs) operand).codegenLoadLhsRvalue(output );
+            ((JLhs) operand).codegenLoadLhsRvalue(output);
+            output.addNoArgInstruction(ICONST_1);
+            output.addNoArgInstruction(ISUB);
             if (!isStatementExpression) {
+                // Loading its original rvalue.
                 ((JLhs) operand).codegenDuplicateRvalue(output);
             }
-
-            // Add 1
-            output.addNoArgInstruction(ICONST_1);
-            // Sub A - 1
-            output.addNoArgInstruction(ISUB);
-
             ((JLhs) operand).codegenStore(output);
         }
     }

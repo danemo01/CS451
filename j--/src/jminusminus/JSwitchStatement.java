@@ -15,6 +15,8 @@ public class JSwitchStatement extends JStatement {
 
     // List of switch-statement groups.
     private ArrayList<SwitchStatementGroup> stmtGroup;
+    private String breakLabel;
+    private boolean hasBreak;
 
     /**
      * Constructs an AST node for a switch-statement.
@@ -34,7 +36,34 @@ public class JSwitchStatement extends JStatement {
      * {@inheritDoc}
      */
     public JStatement analyze(Context context) {
-        // TODO
+// will fix later
+        //        condition = (JExpression) condition.analyze(context);
+//        // Analyze the condition and make sure it's an integer
+//        condition.type().mustMatchExpected(line(), Type.INT);
+//
+//        ArrayList<JExpression> switchLabels = new ArrayList<>();
+//
+//        LocalContext localContext = null;
+//        for (SwitchStatementGroup group : stmtGroup) {
+//            // get a switchCase Context
+//            localContext = new LocalContext(context);
+//
+//            for (JExpression sLabel : group.getSwitchLabels() ) {
+//                sLabel.analyze(context);
+//                if (sLabel != null) {
+//
+//                }
+//            }
+//
+//            for (JStatement block : group.getStatements()) {
+//                block.analyze(localContext);
+//            }
+//
+//            localContext = new LocalContext(context);
+//
+//
+//        }
+
         return this;
     }
 
@@ -80,6 +109,15 @@ class SwitchStatementGroup {
         this.switchLabels = switchLabels;
         this.block = block;
     }
+
+    public ArrayList<JExpression> getSwitchLabels() {
+        return this.switchLabels;
+    }
+
+    public ArrayList<JStatement> getStatements() {
+        return this.block;
+    }
+
 
     /**
      * Stores information about this switch statement group in JSON format.

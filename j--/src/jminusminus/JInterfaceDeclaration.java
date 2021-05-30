@@ -47,20 +47,55 @@ class JInterfaceDeclaration extends JAST implements JTypeDecl {
         this.superType = Type.OBJECT;
         this.superInterfaces = superInterfaces;
         this.interfaceBlock = interfaceBlock;
+
+        // In constructor for JInterfaceDeclaration, add "abstract" and "interface"
+        this.mods.add("abstract");
+        this.mods.add("interface");
     }
 
     /**
      * {@inheritDoc}
      */
     public void declareThisType(Context context) {
-        // TODO
+        String qualifiedName = JAST.compilationUnit.packageName() == "" ?
+                name : JAST.compilationUnit.packageName() + "/" + name;
+        CLEmitter partial = new CLEmitter(false);
+        partial.addClass(mods, qualifiedName, Type.OBJECT.jvmName(), null, false);
+        thisType = Type.typeFor(partial.toClass());
+        context.addType(line, thisType);
     }
 
     /**
      * {@inheritDoc}
      */
     public void preAnalyze(Context context) {
-        // TODO
+        // Construct a class context.
+        this.context = new ClassContext(this, context);
+
+        // Resolve superclass.
+        superType = superType.resolve(this.context);
+
+        // Creating a partial class in memory can result in a java.lang.VerifyError if the
+        // semantics below are violated, so we can't defer these checks to analyze().
+        thisType.checkAccess(line, superType);
+        if (superType.isFinal()) {
+            JAST.compilationUnit.reportSemanticError(line, "Cannot extend a final type: %s",
+                    superType.toString());
+        }
+
+        // Create the (partial) class.
+        CLEmitter partial = new CLEmitter(false);
+
+        // Add the class header to the partial class
+        String qualifiedName = JAST.compilationUnit.packageName() == "" ?
+                name : JAST.compilationUnit.packageName() + "/" + name;
+        partial.addClass(mods, qualifiedName, superType.jvmName(), null, false);
+
+        // Get the ClassRep for the (partial) class and make it the representation for this type.
+        Type id = this.context.lookupType(name);
+        if (id != null && !JAST.compilationUnit.errorHasOccurred()) {
+            id.setClassRep(partial.toClass());
+        }
     }
 
     /**
@@ -88,15 +123,23 @@ class JInterfaceDeclaration extends JAST implements JTypeDecl {
      * {@inheritDoc}
      */
     public Type thisType() {
-        // TODO
-        return null;
+        return thisType;
     }
 
     /**
      * {@inheritDoc}
      */
     public JAST analyze(Context context) {
-        // TODO
+
+        // Finally, ensure that a non-abstract class has no abstract methods.
+        if (!thisType.isAbstract() && thisType.abstractMethods().size() > 0) {
+            String methods = "";
+            for (Method method : thisType.abstractMethods()) {
+                methods += "\n" + method;
+            }
+            JAST.compilationUnit.reportSemanticError(line,
+                    "Class must be abstract since it defines abstract methods: %s", methods);
+        }
         return this;
     }
 
@@ -104,7 +147,21 @@ class JInterfaceDeclaration extends JAST implements JTypeDecl {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // TODO
+        // The class header.
+        String qualifiedName = JAST.compilationUnit.packageName() == "" ?
+                name : JAST.compilationUnit.packageName() + "/" + name;
+
+        //this.superInterfaces = null;
+        ArrayList<String> interfaceList = new ArrayList<>();
+        if (superInterfaces != null) {
+            for (TypeName t : this.superInterfaces)
+                interfaceList.add(t.jvmName());
+        }
+
+        output.addClass(mods, qualifiedName, superType.jvmName(),
+                interfaceList, false);
+
+        // The implicit empty constructor?
     }
 
     /**

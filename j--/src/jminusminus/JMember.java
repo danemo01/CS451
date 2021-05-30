@@ -2,6 +2,8 @@
 
 package jminusminus;
 
+import java.util.Stack;
+
 /**
  * An interface supported by all class (or later, interface) members.
  */
@@ -14,4 +16,7 @@ interface JMember {
      * @param partial the code emitter.
      */
     public void preAnalyze(Context context, CLEmitter partial);
+
+    // Create an empty stack to keep track of the surrounding control-flow statement
+    public static Stack<JStatement> enclosingStatement = new Stack<JStatement>();
 }

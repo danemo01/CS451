@@ -39,6 +39,7 @@ class JLiteralLong extends JExpression {
      */
     public void codegen(CLEmitter output) {
         long l = toLong();
+
         if (l == 0L)
             output.addNoArgInstruction(LCONST_0);
         else if (l == 1L)

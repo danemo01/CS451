@@ -407,6 +407,9 @@ public class Parser {
 
         int line = scanner.token().line();
         JMember interfaceMemberDecl = null;
+        // In constructor for JInterfaceDeclaration, add "abstract" and "interface"
+        mods.add("abstract");
+        mods.add("interface");
 
         Type type = null;
         if (have(VOID)) {
